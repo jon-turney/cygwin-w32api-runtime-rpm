@@ -5,7 +5,7 @@
 
 Name:           cygwin-w32api-runtime
 Version:        5.0.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Windows API libraries for Cygwin toolchain
 
 License:        Public Domain and ZPLv2.1
@@ -23,12 +23,12 @@ Source0:        http://downloads.sourceforge.net/mingw-w64/mingw-w64-v%{version}
 
 BuildRequires:  cygwin32-filesystem
 BuildRequires:  cygwin32-binutils
-BuildRequires:  cygwin32-w32api-headers >= %{version}-%{release}
+BuildRequires:  cygwin32-w32api-headers >= %{version}
 BuildRequires:  cygwin32-gcc
 
 BuildRequires:  cygwin64-filesystem
 BuildRequires:  cygwin64-binutils
-BuildRequires:  cygwin64-w32api-headers >= %{version}-%{release}
+BuildRequires:  cygwin64-w32api-headers >= %{version}
 BuildRequires:  cygwin64-gcc
 
 %description
@@ -37,7 +37,7 @@ Windows cross-compiler runtime base libraries for Cygwin toolchain.
 %package -n cygwin32-w32api-runtime
 Summary:        Windows API libraries for Cygwin32 toolchain
 Requires:       cygwin32-filesystem
-Requires:       cygwin32-w32api-headers >= %{version}-%{release}
+Requires:       cygwin32-w32api-headers >= %{version}
 
 %description -n cygwin32-w32api-runtime
 Windows cross-compiler runtime base libraries for Cygwin32 toolchain.
@@ -45,7 +45,7 @@ Windows cross-compiler runtime base libraries for Cygwin32 toolchain.
 %package -n cygwin64-w32api-runtime
 Summary:        Windows API libraries for Cygwin64 toolchain
 Requires:       cygwin64-filesystem
-Requires:       cygwin64-w32api-headers >= %{version}-%{release}
+Requires:       cygwin64-w32api-headers >= %{version}
 
 %description -n cygwin64-w32api-runtime
 Windows cross-compiler runtime base libraries for Cygwin64 toolchain.
@@ -88,6 +88,9 @@ rm -fr $RPM_BUILD_ROOT%{cygwin64_includedir}/w32api/*.c
 
 
 %changelog
+* Mon Dec 04 2017 Yaakov Selkowitz <yselkowi@redhat.com> - 5.0.3-2
+- Require only matching w32api-headers version, not release
+
 * Wed Nov 15 2017 Yaakov Selkowitz <yselkowi@redhat.com> - 5.0.3-1
 - new version
 
