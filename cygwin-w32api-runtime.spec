@@ -4,8 +4,8 @@
 #%%global branch trunk
 
 Name:           cygwin-w32api-runtime
-Version:        5.0.3
-Release:        2%{?dist}
+Version:        5.0.4
+Release:        1%{?dist}
 Summary:        Windows API libraries for Cygwin toolchain
 
 License:        Public Domain and ZPLv2.1
@@ -88,6 +88,9 @@ rm -fr $RPM_BUILD_ROOT%{cygwin64_includedir}/w32api/*.c
 
 
 %changelog
+* Thu Dec 20 2018 Yaakov Selkowitz <yselkowi@redhat.com> - 5.0.4-1
+- new version
+
 * Mon Dec 04 2017 Yaakov Selkowitz <yselkowi@redhat.com> - 5.0.3-2
 - Require only matching w32api-headers version, not release
 
