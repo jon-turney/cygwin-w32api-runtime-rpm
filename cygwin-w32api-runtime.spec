@@ -4,7 +4,7 @@
 #%%global branch trunk
 
 Name:           cygwin-w32api-runtime
-Version:        8.0.0
+Version:        9.0.0
 Release:        1%{?dist}
 Summary:        Windows API libraries for Cygwin toolchain
 
@@ -30,6 +30,8 @@ BuildRequires:  cygwin64-filesystem
 BuildRequires:  cygwin64-binutils
 BuildRequires:  cygwin64-w32api-headers >= %{version}
 BuildRequires:  cygwin64-gcc
+
+BuildRequires:  make
 
 %description
 Windows cross-compiler runtime base libraries for Cygwin toolchain.
@@ -88,6 +90,12 @@ rm -fr $RPM_BUILD_ROOT%{cygwin64_includedir}/w32api/*.c
 
 
 %changelog
+* Thu Aug 26 2021 Yaakov Selkowitz <yselkowi@redhat.com> - 9.0.0-1
+- new version
+
+* Thu Sep 24 2020 Yaakov Selkowitz <yselkowi@redhat.com> - 8.0.0-1
+- new version
+
 * Wed Apr 01 2020 Yaakov Selkowitz <yselkowi@redhat.com> - 7.0.0-1
 - new version
 
