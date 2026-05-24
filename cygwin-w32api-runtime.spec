@@ -4,13 +4,13 @@
 #%%global branch trunk
 
 Name:           cygwin-w32api-runtime
-Version:        13.0.0
+Version:        14.0.0
 Release:        1%{?dist}
 Summary:        Windows API libraries for Cygwin toolchain
 
 License:        LicenseRef-Fedora-Public-Domain AND ZPL-2.1
 Group:          Development/Libraries
-URL:            http://mingw-w64.sourceforge.net/
+URL:            https://mingw-w64.sourceforge.net/
 BuildArch:      noarch
 
 %if 0%{?snapshot_rev}
@@ -18,9 +18,10 @@ BuildArch:      noarch
 # wget http://sourceforge.net/code-snapshots/svn/m/mi/mingw-w64/code/mingw-w64-code-%{snapshot_rev}-%{branch}.zip
 Source0:        mingw-w64-code-%{snapshot_rev}-%{branch}.zip
 %else
-Source0:        http://downloads.sourceforge.net/mingw-w64/mingw-w64-v%{version}.tar.bz2
+Source0:        https://downloads.sourceforge.net/mingw-w64/mingw-w64-v%{version}.tar.bz2
 %endif
 
+%define _make_verbose %{nil}
 
 # Note about standard dlls
 # ------------------------------------------------------------
@@ -119,6 +120,9 @@ rm -fr %{buildroot}%{cygwin64_includedir}/w32api/*.c
 
 
 %changelog
+* Mon Sep 14 2026 Jon Turney <jon.turney@dronecode.org.uk> - 14.0.0-1
+- new version
+
 * Thu Aug 26 2021 Yaakov Selkowitz <yselkowi@redhat.com> - 9.0.0-1
 - new version
 
