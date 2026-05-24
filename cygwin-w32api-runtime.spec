@@ -21,6 +21,27 @@ Source0:        mingw-w64-code-%{snapshot_rev}-%{branch}.zip
 Source0:        http://downloads.sourceforge.net/mingw-w64/mingw-w64-v%{version}.tar.bz2
 %endif
 
+
+# Note about standard dlls
+# ------------------------------------------------------------
+#
+# We want to be able to build & install cygwin libraries without
+# necessarily needing to install wine.  (And certainly not needing to
+# install Windows!)  There is no requirement to have wine installed in
+# order to use the cygwin toolchain to develop software (i.e. to
+# compile more stuff on top of it), so why require that?
+#
+# So for expediency, this base package provides the "missing" DLLs
+# from Windows.  Another way to do it would be to exclude these
+# proprietary DLLs in our find-requires checking script - essentially
+# it comes out the same either way.
+#
+# (rpm -ql cygwin32-w32api-runtime | grep '\.a$' | while read f ; do i686-pc-cygwin-dlltool   -I $f 2>/dev/null ; done) | sort | uniq | tr A-Z a-z > standard-dlls-cygwin32
+Source1:       standard-dlls-cygwin32
+# (rpm -ql cygwin64-w32api-runtime | grep '\.a$' | while read f ; do x86_64-pc-cygwin-dlltool -I $f 2>/dev/null ; done) | sort | uniq | tr A-Z a-z > standard-dlls-cygwin64
+Source2:       standard-dlls-cygwin64
+
+
 BuildRequires:  cygwin32-filesystem
 BuildRequires:  cygwin32-binutils
 BuildRequires:  cygwin32-w32api-headers >= %{version}
@@ -40,6 +61,8 @@ Windows cross-compiler runtime base libraries for Cygwin toolchain.
 Summary:        Windows API libraries for Cygwin32 toolchain
 Requires:       cygwin32-filesystem
 Requires:       cygwin32-w32api-headers >= %{version}
+Provides:       %(sed "s/\(.*\)/cygwin32(\1) /g" %{SOURCE1} | tr "\n" " ")
+Provides:       cygwin32(mscoree.dll)
 
 %description -n cygwin32-w32api-runtime
 Windows cross-compiler runtime base libraries for Cygwin32 toolchain.
@@ -48,6 +71,8 @@ Windows cross-compiler runtime base libraries for Cygwin32 toolchain.
 Summary:        Windows API libraries for Cygwin64 toolchain
 Requires:       cygwin64-filesystem
 Requires:       cygwin64-w32api-headers >= %{version}
+Provides:       %(sed "s/\(.*\)/cygwin64(\1) /g" %{SOURCE2} | tr "\n" " ")
+Provides:       cygwin64(mscoree.dll)
 
 %description -n cygwin64-w32api-runtime
 Windows cross-compiler runtime base libraries for Cygwin64 toolchain.
