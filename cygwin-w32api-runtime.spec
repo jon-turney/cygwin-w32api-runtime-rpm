@@ -63,6 +63,10 @@ Windows cross-compiler runtime base libraries for Cygwin64 toolchain.
 
 %build
 pushd mingw-w64-crt
+    # Filter out -fstack-protector and -lssp from LDFLAGS as libssp is not yet potentially built with the bootstrap gcc
+    CYGWIN32_LDFLAGS="`echo %{cygwin32_ldflags} | sed 's|-fstack-protector||' | sed 's|-lssp||'`"
+    CYGWIN64_LDFLAGS="`echo %{cygwin64_ldflags} | sed 's|-fstack-protector||' | sed 's|-lssp||'`"
+
     CYGWIN32_CONFIGURE_ARGS="--disable-lib64"
     CYGWIN64_CONFIGURE_ARGS="--disable-lib32"
     %cygwin_configure --enable-w32api
