@@ -66,13 +66,13 @@ pushd mingw-w64-crt
     CYGWIN32_CONFIGURE_ARGS="--disable-lib64"
     CYGWIN64_CONFIGURE_ARGS="--disable-lib32"
     %cygwin_configure --enable-w32api
-    %cygwin_make %{?_smp_mflags}
+    %cygwin_make_build
 popd
 
 
 %install
 pushd mingw-w64-crt
-    %cygwin_make_install DESTDIR=%{buildroot}
+    %cygwin_make_install
 popd
 
 # Dunno what to do with these files
