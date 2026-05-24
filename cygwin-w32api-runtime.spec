@@ -8,7 +8,7 @@ Version:        13.0.0
 Release:        1%{?dist}
 Summary:        Windows API libraries for Cygwin toolchain
 
-License:        Public Domain and ZPLv2.1
+License:        LicenseRef-Fedora-Public-Domain AND ZPL-2.1
 Group:          Development/Libraries
 URL:            http://mingw-w64.sourceforge.net/
 BuildArch:      noarch
