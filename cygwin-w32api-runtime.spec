@@ -72,12 +72,12 @@ popd
 
 %install
 pushd mingw-w64-crt
-    %cygwin_make_install DESTDIR=$RPM_BUILD_ROOT
+    %cygwin_make_install DESTDIR=%{buildroot}
 popd
 
 # Dunno what to do with these files
-rm -fr $RPM_BUILD_ROOT%{cygwin32_includedir}/w32api/*.c
-rm -fr $RPM_BUILD_ROOT%{cygwin64_includedir}/w32api/*.c
+rm -fr %{buildroot}%{cygwin32_includedir}/w32api/*.c
+rm -fr %{buildroot}%{cygwin64_includedir}/w32api/*.c
 
 
 %files -n cygwin32-w32api-runtime
