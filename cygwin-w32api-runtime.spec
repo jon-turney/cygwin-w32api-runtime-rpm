@@ -13,8 +13,6 @@ Group:          Development/Libraries
 URL:            https://mingw-w64.sourceforge.net/
 BuildArch:      noarch
 
-%undefine cygwin_build_aarch64
-
 %if 0%{?snapshot_rev}
 # To regenerate a snapshot:
 # wget http://sourceforge.net/code-snapshots/svn/m/mi/mingw-w64/code/mingw-w64-code-%{snapshot_rev}-%{branch}.zip
@@ -42,6 +40,8 @@ Source0:        https://downloads.sourceforge.net/mingw-w64/mingw-w64-v%{version
 Source1:       standard-dlls-cygwin32
 # (rpm -ql cygwin64-w32api-runtime | grep '\.a$' | while read f ; do x86_64-pc-cygwin-dlltool -I $f 2>/dev/null ; done) | sort | uniq | tr A-Z a-z > standard-dlls-cygwin64
 Source2:       standard-dlls-cygwin64
+# (rpm -ql cygwin-aarch64-w32api-runtime | grep '\.a$' | while read f ; do aarch64-pc-cygwin-dlltool -I $f 2>/dev/null ; done) | sort | uniq | tr A-Z a-z > standard-dlls-cygwin-aarch64
+Source3:       standard-dlls-cygwin-aarch64
 
 
 BuildRequires:  cygwin32-filesystem
@@ -53,6 +53,11 @@ BuildRequires:  cygwin64-filesystem
 BuildRequires:  cygwin64-binutils
 BuildRequires:  cygwin64-w32api-headers >= %{version}
 BuildRequires:  cygwin64-gcc
+
+BuildRequires:  cygwin-aarch64-filesystem
+BuildRequires:  cygwin-aarch64-binutils
+BuildRequires:  cygwin-aarch64-w32api-headers >= %{version}
+BuildRequires:  cygwin-aarch64-gcc
 
 BuildRequires:  make
 
@@ -79,6 +84,16 @@ Provides:       cygwin64(mscoree.dll)
 %description -n cygwin64-w32api-runtime
 Windows cross-compiler runtime base libraries for Cygwin64 toolchain.
 
+%package -n cygwin-aarch64-w32api-runtime
+Summary:        Windows API libraries for Cygwin aarch64 toolchain
+Requires:       cygwin-aarch64-filesystem
+Requires:       cygwin-aarch64-w32api-headers >= %{version}
+Provides:       %(sed "s/\(.*\)/cygwin-aarch64(\1) /g" %{SOURCE3} | tr "\n" " ")
+Provides:       cygwin--aarch64(mscoree.dll)
+
+%description -n cygwin-aarch64-w32api-runtime
+Windows cross-compiler runtime base libraries for Cygwin aarch64 toolchain.
+
 
 %prep
 %if 0%{?snapshot_rev}
@@ -93,9 +108,12 @@ pushd mingw-w64-crt
     # Filter out -fstack-protector and -lssp from LDFLAGS as libssp is not yet potentially built with the bootstrap gcc
     CYGWIN32_LDFLAGS="`echo %{cygwin32_ldflags} | sed 's|-fstack-protector||' | sed 's|-lssp||'`"
     CYGWIN64_LDFLAGS="`echo %{cygwin64_ldflags} | sed 's|-fstack-protector||' | sed 's|-lssp||'`"
+    CYGWIN_AARCH64_LDFLAGS="`echo %{cygwin_aarch64_ldflags} | sed 's|-fstack-protector||' | sed 's|-lssp||'`"
 
+    # configure's default behaviour is to enable lib32 or lib64 based on compiler
     CYGWIN32_CONFIGURE_ARGS="--disable-lib64"
     CYGWIN64_CONFIGURE_ARGS="--disable-lib32"
+    CYGWIN_AARCH64_CONFIGURE_ARGS="--disable-lib32 --disable-lib64 --enable-libarm64"
     %cygwin_configure --enable-w32api
     %cygwin_make_build
 popd
@@ -109,6 +127,7 @@ popd
 # Dunno what to do with these files
 rm -fr %{buildroot}%{cygwin32_includedir}/w32api/*.c
 rm -fr %{buildroot}%{cygwin64_includedir}/w32api/*.c
+rm -fr %{buildroot}%{cygwin_aarch64_includedir}/w32api/*.c
 
 
 %files -n cygwin32-w32api-runtime
@@ -118,6 +137,10 @@ rm -fr %{buildroot}%{cygwin64_includedir}/w32api/*.c
 %files -n cygwin64-w32api-runtime
 %doc COPYING DISCLAIMER DISCLAIMER.PD
 %{cygwin64_libdir}/w32api/
+
+%files -n cygwin-aarch64-w32api-runtime
+%doc COPYING DISCLAIMER DISCLAIMER.PD
+%{cygwin_aarch64_libdir}/w32api/
 
 
 %changelog
